@@ -2,27 +2,30 @@
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 
 namespace SimpleHttpProxy
 {
-    public class Program
+    class Config
     {
-        private static void Main(string[] args)
+        public static int PORT = 3143; //this is an hommage to acng, which uses 3142
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
         {
             var listener = new HttpListener();
-            listener.Prefixes.Add("http://*:7777/");
+            listener.Prefixes.Add($"http://*:{Config.PORT}/");
             listener.Start();
             Console.WriteLine("Listening...");
             while (true)
-            {
-                var ctx = listener.GetContext();
-                new Thread(new Relay(ctx).ProcessRequest).Start();
-            }
+                new Thread(new Relay(listener.GetContext()).ProcessRequest).Start();
         }
     }
 
-    public class Relay
+    class Relay
     {
         private readonly HttpListenerContext originalContext;
 
@@ -31,10 +34,11 @@ namespace SimpleHttpProxy
             this.originalContext = originalContext;
         }
 
-        public void ProcessRequest()
+        public void ProcessRequest() //if in cache read
         {
             string rawUrl = originalContext.Request.RawUrl;
-            ConsoleUtilities.WriteRequest("Proxy receive a request for: " + rawUrl);
+            if(rawUrl[0] == '/') rawUrl = rawUrl.Substring(1);
+            ConsoleUtilities.WriteRequest("Received request for: " + rawUrl);
 
             var relayRequest = (HttpWebRequest) WebRequest.Create(rawUrl);
             relayRequest.KeepAlive = false;
@@ -45,29 +49,29 @@ namespace SimpleHttpProxy
             relayRequest.BeginGetResponse(ResponseCallBack, requestData);
         }
 
-        private static void ResponseCallBack(IAsyncResult asynchronousResult)
+        static void ResponseCallBack(IAsyncResult asynchronousResult)
         {
-            var requestData = (RequestState) asynchronousResult.AsyncState;
-            ConsoleUtilities.WriteResponse("Proxy receive a response from " + requestData.context.Request.RawUrl);
+            RequestState requestData = asynchronousResult.AsyncState;
+            ConsoleUtilities.WriteResponse("Got response from " + requestData.context.Request.RawUrl);
             
-            using (var responseFromWebSiteBeingRelayed = (HttpWebResponse) requestData.webRequest.EndGetResponse(asynchronousResult))
+            using (var responseFromWebSite = (HttpWebResponse) requestData.webRequest.EndGetResponse(asynchronousResult))
             {
-                using (var responseStreamFromWebSiteBeingRelayed = responseFromWebSiteBeingRelayed.GetResponseStream())
+                using (var responseStreamFromWebSite = responseFromWebSite.GetResponseStream())
                 {
                     var originalResponse = requestData.context.Response;
 
-                    if (responseFromWebSiteBeingRelayed.ContentType.Contains("text/html"))
+                    if (responseFromWebSite.ContentType.Contains("application/x-debian-package"))
                     {
-                        var reader = new StreamReader(responseStreamFromWebSiteBeingRelayed);
-                        string html = reader.ReadToEnd();
-                        //Here can modify html
-                        byte[] byteArray = System.Text.Encoding.Default.GetBytes(html);
+                        int size = responseStreamFromWebSite.Length;
+                        byte[] byteArray = new byte[size];
+                        responseStreamFromWebSite.Read(byteArray, 0, length);
+                        //save to cache
                         var stream = new MemoryStream(byteArray);
-                        stream.CopyTo(originalResponse.OutputStream);
+                        originalResponse.OutputStream.Write(byteArray, 0, length);
                     }
                     else
                     {
-                        responseStreamFromWebSiteBeingRelayed.CopyTo(originalResponse.OutputStream);
+                        responseStreamFromWebSite.CopyTo(originalResponse.OutputStream);
                     }
                     originalResponse.OutputStream.Close();
                 }
