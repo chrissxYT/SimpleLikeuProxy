@@ -81,7 +81,10 @@ namespace SimpleHttpProxy
 		{
 			cachedfiles = new Dictionary<string, string>();
 			foreach (string l in ReadAllLines(CACHE_DICT))
-				cachedfiles.Add(l.Substring(l.FirstIndexOf(' ')), l.Substring(0, l.FirstIndexOf(' ')));
+				if(l.Contains(" "))
+					cachedfiles.Add(l.Substring(l.FirstIndexOf(' ')), l.Substring(0, l.FirstIndexOf(' ')));
+				else
+					Console.WriteLine("Invalid line in cache dict: " + l);
 		}
 
 		public void save()
