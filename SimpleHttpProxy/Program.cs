@@ -16,6 +16,13 @@ namespace SimpleHttpProxy
 		public const string ROOT_DIR = "/var/cache/likeu-cacher-ng/";
 		public const string CACHE_DIR = ROOT_DIR + "cache/";
 		public const string CACHE_DICT = CACHE_DIR + "_dict";
+		public static readonly string[] TYPES_TO_CACHE = new[] {
+			"application/x-debian-package",
+			"application/x-msdos-program",
+			"application/zip",
+			"application/x-sh",
+			"application/x-tar",
+		};
 		public static readonly Random RANDOM = new Random();
 
 		/// <summary>
@@ -125,7 +132,7 @@ namespace SimpleHttpProxy
 			this.originalContext = originalContext;
 		}
 
-		public void ProcessRequest() //if in cache read
+		public void ProcessRequest()
 		{
 			string rawUrl = originalContext.Request.RawUrl;
 			Console.WriteLine("Received request for: " + rawUrl);
@@ -150,6 +157,14 @@ namespace SimpleHttpProxy
 			}
 		}
 
+		static bool IsCachable(string ct)
+		{
+			foreach(var s in Config.TYPES_TO_CACHE)
+				if(ct.Contains(s))
+					return true;
+			return false;
+		}
+
 		static void ResponseCallBack(IAsyncResult asynchronousResult)
 		{
 			var requestData = (RequestState) asynchronousResult.AsyncState;
@@ -160,8 +175,7 @@ namespace SimpleHttpProxy
 				using (var responseStreamFromWebSite = responseFromWebSite.GetResponseStream())
 				{
 					var originalResponse = requestData.context.Response;
-
-					if (responseFromWebSite.ContentType.Contains("application/x-debian-package"))
+					if (IsCachable(responseFromWebSite.ContentType))
 					{
 						long size = responseStreamFromWebSite.Length;
 						byte[] byteArray = new byte[size];
