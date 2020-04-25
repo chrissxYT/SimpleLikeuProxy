@@ -138,6 +138,8 @@ namespace SimpleHttpProxy
 		public void ProcessRequest()
 		{
 			string rawUrl = originalContext.Request.RawUrl;
+			if(rawUrl[0] == '/')
+				rawUrl = rawUrl.Substring(1);
 			Console.WriteLine("Received request for: " + rawUrl);
 			if (cache.hasfile(rawUrl))
 			{
