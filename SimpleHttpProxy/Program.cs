@@ -140,6 +140,8 @@ namespace SimpleHttpProxy
 			string rawUrl = originalContext.Request.RawUrl;
 			if(rawUrl[0] == '/')
 				rawUrl = rawUrl.Substring(1);
+			if(!rawUrl.StartsWith("http://") && !rawUrl.StartsWith("https://"))
+				rawUrl = "http://" + rawUrl;
 			Console.WriteLine("Received request for: " + rawUrl);
 			if (cache.hasfile(rawUrl))
 			{
