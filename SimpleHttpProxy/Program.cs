@@ -141,6 +141,7 @@ namespace SimpleHttpProxy
 			Console.WriteLine("Received request for: " + rawUrl);
 			if (cache.hasfile(rawUrl))
 			{
+				Console.WriteLine("Returning from cache…");
 				Task.Run(async () =>
 				{
 					Stream s = File.Open(cache.getfile(rawUrl), FileMode.Open, FileAccess.Read);
@@ -180,6 +181,7 @@ namespace SimpleHttpProxy
 					var originalResponse = requestData.context.Response;
 					if (IsCachable(responseFromWebSite.ContentType))
 					{
+						Console.WriteLine("Saving to cache…");
 						long size = responseStreamFromWebSite.Length;
 						byte[] byteArray = new byte[size];
 						int j;
