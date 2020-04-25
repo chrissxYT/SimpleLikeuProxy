@@ -1,0 +1,13 @@
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/obj/Debug/netcoreapp3.1/SimpleHttpProxy.csprojAssemblyReference.cache
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/obj/Debug/netcoreapp3.1/SimpleHttpProxy.csproj.CoreCompileInputs.cache
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/obj/Debug/netcoreapp3.1/SimpleHttpProxy.AssemblyInfoInputs.cache
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/obj/Debug/netcoreapp3.1/SimpleHttpProxy.AssemblyInfo.cs
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/bin/Debug/netcoreapp3.1/SimpleHttpProxy
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/bin/Debug/netcoreapp3.1/SimpleHttpProxy.deps.json
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/bin/Debug/netcoreapp3.1/SimpleHttpProxy.runtimeconfig.json
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/bin/Debug/netcoreapp3.1/SimpleHttpProxy.runtimeconfig.dev.json
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/bin/Debug/netcoreapp3.1/SimpleHttpProxy.dll
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/bin/Debug/netcoreapp3.1/SimpleHttpProxy.pdb
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/obj/Debug/netcoreapp3.1/SimpleHttpProxy.dll
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/obj/Debug/netcoreapp3.1/SimpleHttpProxy.pdb
+/home/chrissx/SimpleLikeuProxy/SimpleHttpProxy/obj/Debug/netcoreapp3.1/SimpleHttpProxy.genruntimeconfig.cache
