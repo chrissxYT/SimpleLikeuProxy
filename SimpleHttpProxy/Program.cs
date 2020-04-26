@@ -190,10 +190,11 @@ namespace SimpleHttpProxy
 						byte[] byteArray = new byte[size];
 						int j;
 						for (long i = 0; (j = responseStreamFromWebSite.ReadByte()) != -1; i++)
+						{
 							byteArray[i] = (byte) j;
+							originalResponse.OutputStream.WriteByte((byte) j);
+						}
 						cache.addfile(requestData.context.Request.RawUrl, byteArray);
-						foreach (byte b in byteArray)
-							originalResponse.OutputStream.WriteByte(b);
 					}
 					else
 					{
