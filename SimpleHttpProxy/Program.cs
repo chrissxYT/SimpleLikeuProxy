@@ -19,6 +19,7 @@ namespace SimpleHttpProxy
 		public static readonly string[] TYPES_TO_CACHE = new[] {
 			"application/x-debian-package",
 			"application/x-msdos-program",
+			"application/java-archive",
 			"application/zip",
 			"application/x-sh",
 			"application/x-tar",
